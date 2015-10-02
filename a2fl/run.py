@@ -15,6 +15,7 @@ from mininet.node import OVSKernelSwitch
 
 MAGIC_MAC = "00:11:00:11:00:11"
 MAGIC_IP  = "10.111.111.111"
+logdir = "/var/log/ryu"
 
 class MyTopo(Topo):
 	"""Simple topology example."""
@@ -30,18 +31,21 @@ class MyTopo(Topo):
 
 class Ryu(Thread):
 
-	def __init__(self,  log=None):
+	def __init__(self, ryudir, log=None):
 
 		Thread.__init__(self)
 		self.log = log
+		self.ryudir = ryudir
 		print("Initializing Ryu controller and logs "+log)
 
 	def run(self):
 		home = os.getenv("HOME")
- 		os.chdir(home + "/ryu")
+		if not os.path.exists(logdir):
+			os.mkdir(logdir)
+ 		os.chdir(self.ryudir)
 		os.environ["PYTHONPATH"] = "."
 		if self.log != None:
-			self.log = open(self.log, 'w')
+			self.log = open(logdir + "/" + self.log, 'w')
 
 		self.proc = Popen(
 			("./bin/ryu-manager","--verbose","ryu/app/simple_switch.py"),
@@ -72,6 +76,7 @@ class Prox(Thread):
 def parse_args():
 
 	parser = ArgumentParser()
+	parser.add_argument("-r", "--ryu",   help="ryu directory",    default="/home/mininet/ryu")
 	parser.add_argument("-l", "--log",   help="ryu log file",    default="ryu.log")
 	parser.add_argument("-p", "--prox",  help="path to ptprox.c",       default="ptprox.c")
 	parser.add_argument("-m", "--plog",  help="ptprox log file",        default="ptprox.log")
@@ -119,7 +124,7 @@ if __name__ == "__main__":
 
 	args = parse_args()
 
-	fl = Ryu(args.log)
+	fl = Ryu(args.ryu, args.log)
 	fl.start()
 
 	build_prox(args.prox)
