@@ -5,13 +5,14 @@ from argparse     import ArgumentParser
 from subprocess   import Popen, STDOUT, PIPE
 from socket       import socket, AF_INET, SOCK_STREAM
 from time         import sleep
-import os
 from sys          import stdout
 from threading    import Thread;
 from mininet.net  import Mininet
 from mininet.topo import Topo
 from mininet.node import RemoteController
 from mininet.node import OVSKernelSwitch
+import os
+import psutil
 
 MAGIC_MAC = "00:11:00:11:00:11"
 MAGIC_IP  = "10.111.111.111"
@@ -36,9 +37,13 @@ class Ryu(Thread):
 		Thread.__init__(self)
 		self.log = log
 		self.ryudir = ryudir
-		print("Initializing Ryu controller and logs "+log)
 
 	def run(self):
+		for process in psutil.process_iter():
+    			if "./bin/ryu-manager" in process.cmdline:
+        			print('Old Ryu Process found...Terminating it.')
+				process.terminate()
+		print("Initializing Ryu controller and logs "+log)
 		home = os.getenv("HOME")
 		if not os.path.exists(logdir):
 			os.mkdir(logdir)
