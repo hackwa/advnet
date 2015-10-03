@@ -77,7 +77,7 @@ class Ryu(Thread):
 
 		self.proc = Popen(
 #			("./bin/ryu-manager","--verbose","ryu/app/simple_switch.py"),
-			("./bin/ryu-manager","ryu/app/simple_switch.py"),
+			("./bin/ryu-manager","ryu/app/simple_switch1.py"),
 			stdout=self.log, stderr=self.log
 		)
 
@@ -93,6 +93,7 @@ class Prox(Thread):
 
 		if self.log != None:
 			self.log = open(self.log, 'w')
+		print("Initiating ptprox")
 
 		while True:
 			self.proc = self.node.popen(
@@ -105,7 +106,7 @@ class Prox(Thread):
 def parse_args():
 
 	parser = ArgumentParser()
-	parser.add_argument("-r", "--ryu",   help="ryu directory",    default="/home/mininet/ryu")
+	parser.add_argument("-r", "--ryu",   help="ryu directory",    default="/home/mininet/advnet/ryu")
 	parser.add_argument("-l", "--log",   help="ryu log file",    default="ryu.log")
 	parser.add_argument("-p", "--prox",  help="path to ptprox.c",       default="ptprox.c")
 	parser.add_argument("-m", "--plog",  help="ptprox log file",        default="ptprox.log")
