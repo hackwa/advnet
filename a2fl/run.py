@@ -50,7 +50,7 @@ class MyTopo(Topo):
 		self.addLink( middleSwitch, rightSwitch )
 		self.addLink( rightSwitch, rightHost1 )
 		self.addLink( rightSwitch, rightHost2 )
-		self.addLink( rightSwitch, proxy )
+		self.addLink( middleSwitch, proxy )
 		
 
 class Ryu(Thread):
@@ -76,7 +76,8 @@ class Ryu(Thread):
 			self.log = open(logdir + "/" + self.log, 'w')
 
 		self.proc = Popen(
-			("./bin/ryu-manager","--verbose","ryu/app/simple_switch.py"),
+#			("./bin/ryu-manager","--verbose","ryu/app/simple_switch.py"),
+			("./bin/ryu-manager","ryu/app/simple_switch.py"),
 			stdout=self.log, stderr=self.log
 		)
 
