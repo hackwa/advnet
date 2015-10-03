@@ -11,12 +11,20 @@ from mininet.net  import Mininet
 from mininet.topo import Topo
 from mininet.node import RemoteController
 from mininet.node import OVSKernelSwitch
-import os
+import mininet.clean
+import os,sys
+import signal
 import psutil
 
 MAGIC_MAC = "00:11:00:11:00:11"
 MAGIC_IP  = "10.111.111.111"
 logdir = "/var/log/ryu"
+
+def sighandler(signal, frame):
+	print("Keyboard Interrupt!! Cleaning up..")
+	mininet.clean.Cleanup().cleanup()
+	sys.exit(1)
+signal.signal(signal.SIGINT, sighandler)
 
 class MyTopo(Topo):
 	"""Simple topology example."""
@@ -26,8 +34,23 @@ class MyTopo(Topo):
 
 		# Initialize topology
 		Topo.__init__(self)
+		
+		leftHost1 = self.addHost('h1')
+		leftHost2 = self.addHost('h2')
+		rightHost1 = self.addHost('h3')
+		rightHost2 = self.addHost('h4')
+		proxy = self.addHost('prox')
+		leftSwitch = self.addSwitch('s1')
+		middleSwitch = self.addSwitch('s2')
+		rightSwitch = self.addSwitch('s3')
 
-		# EDIT HERE
+		self.addLink( leftHost1, leftSwitch )
+		self.addLink( leftHost2, leftSwitch )
+		self.addLink( leftSwitch, middleSwitch )
+		self.addLink( middleSwitch, rightSwitch )
+		self.addLink( rightSwitch, rightHost1 )
+		self.addLink( rightSwitch, rightHost2 )
+		self.addLink( rightSwitch, proxy )
 		
 
 class Ryu(Thread):
@@ -43,7 +66,7 @@ class Ryu(Thread):
     			if "./bin/ryu-manager" in process.cmdline:
         			print('Old Ryu Process found...Terminating it.')
 				process.terminate()
-		print("Initializing Ryu controller and logs "+log)
+		print("Initializing Ryu controller and logs "+self.log)
 		home = os.getenv("HOME")
 		if not os.path.exists(logdir):
 			os.mkdir(logdir)
@@ -161,5 +184,3 @@ if __name__ == "__main__":
 	mn.interact()
 
 	# TODO cleanup threads
-
-# vim: set noet ts=4 sw=4 :
