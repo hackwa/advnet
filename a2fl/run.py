@@ -2,7 +2,7 @@
 
 from __future__   import print_function
 from argparse     import ArgumentParser
-from subprocess   import Popen, STDOUT, PIPE
+from subprocess   import Popen, STDOUT, PIPE, call
 from socket       import socket, AF_INET, SOCK_STREAM
 from time         import sleep
 from sys          import stdout
@@ -75,10 +75,10 @@ class Ryu(Thread):
 		if self.log != None:
 			self.log = open(logdir + "/" + self.log, 'w')
 
-		self.proc = Popen(
+		self.proc = call(
 #			("./bin/ryu-manager","--verbose","ryu/app/simple_switch.py"),
-			("./bin/ryu-manager","ryu/app/simple_switch1.py"),
-			stdout=self.log, stderr=self.log
+			("./bin/ryu-manager --observe-links ryu/app/shortestpath.py"),
+			stdout=self.log, stderr=self.log, shell=True
 		)
 
 class Prox(Thread):

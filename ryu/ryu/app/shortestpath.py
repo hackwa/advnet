@@ -96,12 +96,11 @@ class ProjectController(app_manager.RyuApp):
         src = eth.src
         dpid = datapath.id
         self.mac_to_port.setdefault(dpid, {})
-        #print "nodes"
-        #print self.net.nodes()
-        #print "edges"
-        #print self.net.edges()
-        #self.logger.info("packet in %s %s %s %s", dpid, src, dst, msg.in_port)
+        self.logger.info("nodes: " + str(self.net.nodes()))
+#        self.logger.info("edges: " + str(self.net.edges()))
+        self.logger.info("packet in %s %s %s %s", dpid, src, dst, msg.in_port)
         if src not in self.net:
+            self.logger.info("Adding Source: " + src)
             self.net.add_node(src)
             self.net.add_edge(dpid,src,{'port':msg.in_port})
             self.net.add_edge(src,dpid)
@@ -130,14 +129,15 @@ class ProjectController(app_manager.RyuApp):
     
     @set_ev_cls(event.EventSwitchEnter)
     def get_topology_data(self, ev):
+        self.logger.info("Adding switch...")
         switch_list = get_switch(self.topology_api_app, None)   
         switches=[switch.dp.id for switch in switch_list]
         self.net.add_nodes_from(switches)
          
-        #print "**********List of switches"
-        #for switch in switch_list:
-        #self.ls(switch)
-        #print switch
+        self.logger.info("**********List of switches")
+        for switch in switch_list:
+            self.ls(switch)
+            self.logger.info(switch)
         #self.nodes[self.no_of_nodes] = switch
         #self.no_of_nodes += 1
 	
@@ -149,11 +149,11 @@ class ProjectController(app_manager.RyuApp):
         links=[(link.dst.dpid,link.src.dpid,{'port':link.dst.port_no}) for link in links_list]
         #print links
         self.net.add_edges_from(links)
-        print "**********List of links"
-        print self.net.edges()
-        #for link in links_list:
-	    #print link.dst
-            #print link.src
+        self.logger.info("**********List of links")
+        self.logger.info(self.net.edges())
+        for link in links_list:
+            self.logger.info(link.dst)
+            self.logger.info(link.src)
             #print "Novo link"
 	    #self.no_of_links += 1
       
