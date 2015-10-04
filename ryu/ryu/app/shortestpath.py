@@ -50,6 +50,13 @@ from ryu.app.wsgi import ControllerBase
 from ryu.topology import event, switches 
 import networkx as nx
 
+h1="00:00:00:00:00:01"
+h2="00:00:00:00:00:02"
+h3="00:00:00:00:00:03"
+h4="00:00:00:00:00:04"
+prox="00:00:00:00:00:05"
+custom_topo = [h1,h2,h3,h4,prox]
+
 class ProjectController(app_manager.RyuApp):
 	
     OFP_VERSIONS = [ofproto_v1_0.OFP_VERSION]
@@ -88,7 +95,7 @@ class ProjectController(app_manager.RyuApp):
         msg = ev.msg
         datapath = msg.datapath
         ofproto = datapath.ofproto
-
+#        self.logger.info(dir(ofproto))
         pkt = packet.Packet(msg.data)
         eth = pkt.get_protocol(ethernet.ethernet)
 
@@ -96,25 +103,33 @@ class ProjectController(app_manager.RyuApp):
         src = eth.src
         dpid = datapath.id
         self.mac_to_port.setdefault(dpid, {})
-        self.logger.info("nodes: " + str(self.net.nodes()))
+#        self.logger.info("nodes: " + str(self.net.nodes()))
 #        self.logger.info("edges: " + str(self.net.edges()))
-        self.logger.info("packet in %s %s %s %s", dpid, src, dst, msg.in_port)
+        if src in custom_topo:
+            self.logger.info("packet in %s %s %s %s", dpid, src, dst, msg.in_port)
         if src not in self.net:
             self.logger.info("Adding Source: " + src)
             self.net.add_node(src)
             self.net.add_edge(dpid,src,{'port':msg.in_port})
             self.net.add_edge(src,dpid)
-        if dst in self.net:
-            #print (src in self.net)
-            #print nx.shortest_path(self.net,1,4)
-            #print nx.shortest_path(self.net,4,1)
-            #print nx.shortest_path(self.net,src,4)
+        # Policy #1
+        if src == h1 and dst == h2:  
+            if (dpid == 1 or dpid == 2) and msg.in_port ==1:
+                self.logger.info("forwarding traffic from %s to %s via %s"%(h1,h2, prox))
+                dst = prox
+            elif dpid == 2 and msg.in_port != 1:
+                src = prox
 
+        if dst in self.net:
             path=nx.shortest_path(self.net,src,dst)   
             next=path[path.index(dpid)+1]
             out_port=self.net[dpid][next]['port']
         else:
             out_port = ofproto.OFPP_FLOOD
+        # Policy #2
+        if src == h1 and dst == h4:
+            self.logger.info("deny packet from %s to %s"%(h1,h4))
+            out_port = ofproto.OFPP_NONE
 
         actions = [datapath.ofproto_parser.OFPActionOutput(out_port)]
 
@@ -149,11 +164,11 @@ class ProjectController(app_manager.RyuApp):
         links=[(link.dst.dpid,link.src.dpid,{'port':link.dst.port_no}) for link in links_list]
         #print links
         self.net.add_edges_from(links)
-        self.logger.info("**********List of links")
-        self.logger.info(self.net.edges())
-        for link in links_list:
-            self.logger.info(link.dst)
-            self.logger.info(link.src)
+        #self.logger.info("**********List of links")
+        #self.logger.info(self.net.edges())
+        #for link in links_list:
+        #    self.logger.info(link.dst)
+        #    self.logger.info(link.src)
             #print "Novo link"
 	    #self.no_of_links += 1
       

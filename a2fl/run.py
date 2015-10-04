@@ -94,10 +94,11 @@ class Prox(Thread):
 		if self.log != None:
 			self.log = open(self.log, 'w')
 		print("Initiating ptprox")
+		print(os.getcwd())
 
 		while True:
 			self.proc = self.node.popen(
-				["./ptprox", "prox-eth0"],
+				["../a2fl/ptprox", "prox-eth0"],
 				stdout=self.log, stderr=self.log
 			)
 			self.proc.wait()
@@ -180,8 +181,8 @@ if __name__ == "__main__":
 		print("Magic ping " + src.intf(None).MAC())
 		src.setARP(ip=MAGIC_IP, mac=MAGIC_MAC)
 		src.cmd("ping", "-c1", "-W1", MAGIC_IP)
-
-	px = Prox(mn.getNodeByName("prox"), args.plog)
+	proxylogs = logdir + "/" + args.plog
+	px = Prox(mn.getNodeByName("prox"), proxylogs)
 	px.start()
 	mn.interact()
 
