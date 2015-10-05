@@ -1,0 +1,4 @@
+Any node can talk to any other node directly.
+h1 cannot talk to h4.
+h1 and h2 can only communicate through proxy.
+
