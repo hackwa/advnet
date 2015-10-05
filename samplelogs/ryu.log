@@ -1,0 +1,70 @@
+loading app ryu/app/shortestpath.py
+Generating grammar tables from /usr/lib/python3.4/lib2to3/Grammar.txt
+Generating grammar tables from /usr/lib/python3.4/lib2to3/PatternGrammar.txt
+loading app ryu.controller.ofp_handler
+loading app ryu.topology.switches
+loading app ryu.controller.ofp_handler
+instantiating app ryu.controller.ofp_handler of OFPHandler
+instantiating app ryu.topology.switches of Switches
+instantiating app ryu/app/shortestpath.py of ProjectController
+Adding switch...
+**********List of switches
+Switch<dpid=1, Port<dpid=1, port_no=1, DOWN> Port<dpid=1, port_no=2, LIVE> Port<dpid=1, port_no=3, LIVE> >
+Switch<dpid=2, Port<dpid=2, port_no=1, LIVE> Port<dpid=2, port_no=2, LIVE> Port<dpid=2, port_no=3, LIVE> >
+Switch<dpid=3, Port<dpid=3, port_no=1, LIVE> Port<dpid=3, port_no=2, LIVE> Port<dpid=3, port_no=3, LIVE> >
+Adding switch...
+**********List of switches
+Switch<dpid=1, Port<dpid=1, port_no=1, DOWN> Port<dpid=1, port_no=2, LIVE> Port<dpid=1, port_no=3, LIVE> >
+Switch<dpid=2, Port<dpid=2, port_no=1, LIVE> Port<dpid=2, port_no=2, LIVE> Port<dpid=2, port_no=3, LIVE> >
+Switch<dpid=3, Port<dpid=3, port_no=1, LIVE> Port<dpid=3, port_no=2, LIVE> Port<dpid=3, port_no=3, LIVE> >
+Adding switch...
+**********List of switches
+Switch<dpid=1, Port<dpid=1, port_no=1, DOWN> Port<dpid=1, port_no=2, LIVE> Port<dpid=1, port_no=3, LIVE> >
+Switch<dpid=2, Port<dpid=2, port_no=1, LIVE> Port<dpid=2, port_no=2, LIVE> Port<dpid=2, port_no=3, LIVE> >
+Switch<dpid=3, Port<dpid=3, port_no=1, LIVE> Port<dpid=3, port_no=2, LIVE> Port<dpid=3, port_no=3, LIVE> >
+Adding Source: 12:8c:7c:69:bc:0a
+Adding Source: d2:31:aa:d6:07:3f
+Adding Source: 2e:f9:6c:b3:c8:3b
+Adding Source: 7a:80:3b:7b:7e:ea
+packet in 1 00:00:00:00:00:01 00:11:00:11:00:11 1
+Adding Source: 00:00:00:00:00:01
+packet in 2 00:00:00:00:00:01 00:11:00:11:00:11 1
+packet in 3 00:00:00:00:00:01 00:11:00:11:00:11 1
+packet in 1 00:00:00:00:00:02 00:11:00:11:00:11 2
+Adding Source: 00:00:00:00:00:02
+packet in 2 00:00:00:00:00:02 00:11:00:11:00:11 1
+packet in 3 00:00:00:00:00:02 00:11:00:11:00:11 1
+packet in 3 00:00:00:00:00:03 00:11:00:11:00:11 2
+Adding Source: 00:00:00:00:00:03
+packet in 2 00:00:00:00:00:03 00:11:00:11:00:11 2
+packet in 1 00:00:00:00:00:03 00:11:00:11:00:11 3
+packet in 3 00:00:00:00:00:04 00:11:00:11:00:11 3
+Adding Source: 00:00:00:00:00:04
+packet in 2 00:00:00:00:00:04 00:11:00:11:00:11 2
+packet in 1 00:00:00:00:00:04 00:11:00:11:00:11 3
+packet in 2 00:00:00:00:00:05 00:11:00:11:00:11 3
+Adding Source: 00:00:00:00:00:05
+packet in 3 00:00:00:00:00:05 00:11:00:11:00:11 1
+packet in 1 00:00:00:00:00:05 00:11:00:11:00:11 3
+packet in 1 00:00:00:00:00:01 00:00:00:00:00:02 1
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 2 00:00:00:00:00:01 00:00:00:00:00:02 1
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 2 00:00:00:00:00:01 00:00:00:00:00:02 3
+packet in 1 00:00:00:00:00:01 00:00:00:00:00:02 3
+packet in 1 00:00:00:00:00:02 00:00:00:00:00:01 2
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 2 00:00:00:00:00:02 00:00:00:00:00:01 1
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 1 00:00:00:00:00:01 00:00:00:00:00:02 1
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 2 00:00:00:00:00:01 00:00:00:00:00:02 1
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 2 00:00:00:00:00:02 00:00:00:00:00:01 3
+packet in 1 00:00:00:00:00:02 00:00:00:00:00:01 2
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 1 00:00:00:00:00:02 00:00:00:00:00:01 3
+packet in 2 00:00:00:00:00:02 00:00:00:00:00:01 1
+forwarding traffic from 00:00:00:00:00:01 to 00:00:00:00:00:02 via 00:00:00:00:00:05
+packet in 1 00:00:00:00:00:01 00:00:00:00:00:04 1
+deny packet from 00:00:00:00:00:01 to 00:00:00:00:00:04
