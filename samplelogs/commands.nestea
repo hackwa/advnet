@@ -1,0 +1,60 @@
+Topology:
+mininet> links
+h1-eth0<->s1-eth1 (OK OK)
+h2-eth0<->s1-eth2 (OK OK)
+s1-eth3<->s2-eth1 (OK OK)
+s2-eth3<->prox-eth0 (OK OK)
+s2-eth2<->s3-eth1 (OK OK)
+s3-eth2<->h3-eth0 (OK OK)
+s3-eth3<->h4-eth0 (OK OK)
+mininet> dump
+<Host h1: h1-eth0:10.0.0.1 pid=26483> 
+<Host h2: h2-eth0:10.0.0.2 pid=26487> 
+<Host h3: h3-eth0:10.0.0.3 pid=26489> 
+<Host h4: h4-eth0:10.0.0.4 pid=26491> 
+<Host prox: prox-eth0:10.0.0.5 pid=26493> 
+<OVSSwitch s1: lo:127.0.0.1,s1-eth1:None,s1-eth2:None,s1-eth3:None pid=26498> 
+<OVSSwitch s2: lo:127.0.0.1,s2-eth1:None,s2-eth2:None,s2-eth3:None pid=26501> 
+<OVSSwitch s3: lo:127.0.0.1,s3-eth1:None,s3-eth2:None,s3-eth3:None pid=26504> 
+<RemoteController c0: 127.0.0.1:6633 pid=26477> 
+
+Flows:
+mininet> dpctl dump-flows
+*** s1 ------------------------------------------------------------------------
+NXST_FLOW reply (xid=0x4):
+ cookie=0x0, duration=3227.756s, table=0, n_packets=0, n_bytes=0, idle_age=3227, in_port=2,dl_dst=00:00:00:00:00:05 actions=output:3
+ cookie=0x0, duration=3228.758s, table=0, n_packets=1, n_bytes=98, idle_age=3227, in_port=3,dl_dst=00:00:00:00:00:02 actions=output:2
+ cookie=0x0, duration=2869.72s, table=0, n_packets=1, n_bytes=98, idle_age=2535, in_port=1,dl_dst=00:00:00:00:00:04 actions=ANY
+ cookie=0x0, duration=3227.756s, table=0, n_packets=1, n_bytes=98, idle_age=3226, in_port=3,dl_dst=00:00:00:00:00:01 actions=output:1
+ cookie=0x0, duration=3228.381s, table=0, n_packets=0, n_bytes=0, idle_age=3228, in_port=1,dl_dst=00:00:00:00:00:05 actions=output:3
+ cookie=0x0, duration=3250.862s, table=0, n_packets=3603, n_bytes=183753, idle_age=0, priority=65535,dl_dst=01:80:c2:00:00:0e,dl_type=0x88cc actions=CONTROLLER:51
+*** s2 ------------------------------------------------------------------------
+NXST_FLOW reply (xid=0x4):
+ cookie=0x0, duration=3228.762s, table=0, n_packets=1, n_bytes=98, idle_age=3227, in_port=3,dl_dst=00:00:00:00:00:02 actions=output:1
+ cookie=0x0, duration=3227.761s, table=0, n_packets=1, n_bytes=98, idle_age=3226, in_port=3,dl_dst=00:00:00:00:00:01 actions=output:1
+ cookie=0x0, duration=3227.757s, table=0, n_packets=0, n_bytes=0, idle_age=3227, in_port=1,dl_dst=00:00:00:00:00:05 actions=output:3
+ cookie=0x0, duration=3250.864s, table=0, n_packets=7204, n_bytes=367404, idle_age=0, priority=65535,dl_dst=01:80:c2:00:00:0e,dl_type=0x88cc actions=CONTROLLER:51
+*** s3 ------------------------------------------------------------------------
+NXST_FLOW reply (xid=0x4):
+ cookie=0x0, duration=3250.868s, table=0, n_packets=3603, n_bytes=183753, idle_age=0, priority=65535,dl_dst=01:80:c2:00:00:0e,dl_type=0x88cc actions=CONTROLLER:51
+mininet> 
+
+Ping:
+mininet> h1 ping h2 -c2
+PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=1627 ms
+64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=1626 ms
+
+--- 10.0.0.2 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1000ms
+rtt min/avg/max/mdev = 1626.807/1627.323/1627.840/1.376 ms, pipe 2
+mininet> h1 ping h4 -c1
+PING 10.0.0.4 (10.0.0.4) 56(84) bytes of data.
+
+--- 10.0.0.4 ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+
+Iperf:
+mininet> iperf
+*** Iperf: testing TCP bandwidth between h1 and prox 
+*** Results: ['14.8 Gbits/sec', '14.9 Gbits/sec']
