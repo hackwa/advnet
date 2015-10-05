@@ -113,12 +113,13 @@ class ProjectController(app_manager.RyuApp):
             self.net.add_edge(dpid,src,{'port':msg.in_port})
             self.net.add_edge(src,dpid)
         # Policy #1
-        if src == h1 and dst == h2:  
-            if (dpid == 1 or dpid == 2) and msg.in_port ==1:
+        couple = [h1,h2]
+        if src and dst in couple: 
+            if dpid == 2 and msg.in_port == 3:
+                src = prox 
+            elif (dpid == 1 or dpid == 2) and msg.in_port ==1 or msg.in_port == 2:
                 self.logger.info("forwarding traffic from %s to %s via %s"%(h1,h2, prox))
                 dst = prox
-            elif dpid == 2 and msg.in_port != 1:
-                src = prox
 
         if dst in self.net:
             path=nx.shortest_path(self.net,src,dst)   
